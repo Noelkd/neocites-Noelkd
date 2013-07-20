@@ -76,7 +76,7 @@ turtle.forward = function(length) {
      return this.angleInRadians * 180.0 / Math.PI; 
  }
 
-var rewrite = function(word, rules) {
+function rewrite(word, rules) {
     
     var wordList = word.split(",")
     for (var i = 0; i <= wordList.length-1; i++) { 
@@ -93,7 +93,7 @@ var rewrite = function(word, rules) {
     return wordList.join("")
 }
 
-var createword = function(iterations, word, rules) {
+function createword(iterations, word, rules) {
 
     for (var i = 1; i<= iterations; i++) {
         word = rewrite(word, rules)
