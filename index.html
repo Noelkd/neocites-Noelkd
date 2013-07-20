@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<!-- Noelkd "".join(["nkdoherty", "@","gmail",".","com"]) -->
+<html>
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+    <title>
+     Noelkd
+    </title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <!--[if lt IE 9]> <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script><![endif]-->
+  </head>
+  <BODY onLoad="main(1)">
+
+  <!--<input id="clickMe" type="button" value="CLICK!" />
+  <input type="text" id="iters" value="1" /> -->
+  <canvas id="thecanvas" width="1920" height="1080"></canvas>
+  
+  <script type="text/javascript" >
+    "use strict";
+    var color = { black : "#ffffff",
+                  red : "#ff0000",
+                  green : "#00ff00",
+                  blue : "#0000ff",
+                  yellow : "#ffff00",
+                  fuchsia : "#ff00ff",
+                  aqua : "#00ffff"
+                }
+
+    var turtle = { x: 0,
+                   y: 0,
+                   angleInRadians: 0,
+                   penDown: false,
+                   penColor: "#000000",
+                   lineWidth: 2
+                };
+
+    var canvas = document.getElementById('thecanvas');
+
+    //document.getElementById("clickMe").onclick = function (){turtle.lset()};
+
+
+    if (canvas && canvas.getContext)  {     // does the browser support 'canvas'?
+        turtle.ct = canvas.getContext("2d");   // get drawing context
+    } else {
+        alert('You need a browser which supports the HTML5 canvas!');
+    }  
+
+    turtle.logPenStatus = function() {
+        console.log('x=' + this.x + "; y=" + this.y + '; angle = ' + this.angle + '; penDown = ' + this.penDown);
+    }
+
+    turtle.forward = function(length) {
+      // console.log('forward(' + length + ')');
+      // this.logPenStatus();
+       var x0 = this.x,
+       y0 = this.y;
+       this.x += length * Math.sin(this.angleInRadians);
+       this.y += length * Math.cos(this.angleInRadians);
+        if (this.ct) {
+        if (this.penDown) {
+          //this.logPenStatus();
+        this.ct.beginPath(); 
+        this.ct.lineWidth   = this.lineWidth;
+        this.ct.strokeStyle = this.penColor;
+        this.ct.moveTo(x0, y0);
+        this.ct.lineTo(this.x, this.y);
+        this.ct.stroke();
+        }
+      }
+       else
+        this.ct.moveTo(this.x, this.y);
+       return this;
+      }    
+
+     turtle.backward = function(length) {
+            this.forward(-length);
+            return this;
+     }
+
+     turtle.left = function(angleInDegrees) {
+            // console.log('left(' + angleInDegrees + ')');
+            // A complete circle, 360º, is equivalent to 2π radians  
+            // angleInDegrees is an angle measure in degrees
+      this.angleInRadians += angleInDegrees * Math.PI / 180.0;
+      return this;
+      }
+
+     turtle.right = function(angleInDegrees) {
+            this.left(-angleInDegrees);
+            return this;
+        }
+
+     turtle.angle = function() {
+         // the turtle status is hold in this.angleInRadians;
+         // degrees are often more convenient for the display
+         return this.angleInRadians * 180.0 / Math.PI; 
+     }
+
+    var rewrite = function(word) {
+
+        var wordList = word.split(",")
+        for (var i = 0; i <= wordList.length-1; i++) { 
+            var curChar = wordList[i]
+            if (curChar == "X") {
+                wordList[i] = ",X,+,Y,F,"
+            }
+            else if (curChar == "Y") {
+                wordList[i] = ",F,X,-,Y,"
+            }
+            else {
+                if (curChar.length > 0){
+                wordList[i] = curChar+=","
+                 }
+        }
+      }
+        return wordList.join("")
+    }
+
+    var createword = function(iterations, word) {
+    
+        for (var i = 1; i<= iterations; i++) {
+            word = rewrite(word)
+        }
+        return word
+    }
+
+    var clearCanvas = function() {
+        var context = canvas.getContext('2d');
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    turtle.lset = function (iterations) {
+        clearCanvas();
+        
+        //var iterations = document.getElementById('iters').value;
+        if (iterations < 1){
+          iterations = 0
+        }
+        else{
+          turtle.right(90)
+        }
+        turtle.x = 500;
+        turtle.y = 400;
+        turtle.penDown = true;
+        var distance = 15;
+        var angle = 90;
+        var world = createword(iterations, "F,X");
+        var finalworld = world.split(",");
+
+        for(var i = 0; i<= finalworld.length; i++) {
+    
+            var curChar = finalworld[i]
+            if (curChar == "F"){
+                turtle.forward(distance)
+            }
+            if (curChar == "+"){
+                turtle.left(angle)
+            }
+            if (curChar == "-"){
+                turtle.right(angle)
+            }
+        }
+    }
+    function main (iters){
+        if (iters >= 15){
+          turtle.lset(0)
+          setTimeout(function(){main(1)},600)
+        }
+        else{
+        turtle.lset(iters)
+        setTimeout(function(){main(iters+1)},600);
+        }
+      }
+    
+  </script>
+    <img src="http://www.e-zeeinternet.com/count.php?page=984198&style=microsc&nbdigits=5&reloads=1"  border="0" >
+    <img src="http://www.e-zeeinternet.com/count.php?page=984199&style=microsc&nbdigits=5"  border="0" >
+    <a href="http://www.w3.org/html/logo/">
+      <img src="http://www.w3.org/html/logo/badge/html5-badge-h-solo.png" width="63" height="64" alt="HTML5 Powered" title="HTML5 Powered">
+    </a>
+  </body>
+</html>
+
