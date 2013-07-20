@@ -27,7 +27,7 @@ else {
 
 turtle.logPenStatus = function() {
     console.log('x=' + this.x + "; y=" + this.y + '; angle = ' + this.angle + '; penDown = ' + this.penDown);
-}
+} 
 
 turtle.forward = function(length) {
   // console.log('forward(' + length + ')');
@@ -85,10 +85,9 @@ turtle.dragoncurve = function (iterations) {
     this.penDown = true;
     var distance = 15;
     var angle = 90;
-    var rules = { "X":",X,+,Y,F,", "Y":",F,X,-,Y,"}
-    var world = createword(iterations, "F,X", rules);
-    var finalworld = world.split(",");
-    draw_lsystem(finalworld, distance, angle)
+    var rules = { "X":"X+YF", "Y":"FX-Y"}
+    var world = createword(iterations, "FX", rules);
+    draw_lsystem(world, distance, angle)
     
 }
 
@@ -109,10 +108,9 @@ turtle.sierpinski = function(iterations){
     this.penDown = true;
     var distance = 100/(iterations*3) 
     var angle = 60;
-    var rules = { "F":",G,-,F,-,G,", "G":",F,+,G,+,F,"};
-    var world = createword(iterations, "F,", rules);
-    var finalworld = world.split(",");
-    draw_lsystem(finalworld, distance, angle)
+    var rules = { "F":"G-F-G", "G":"F+G+F"};
+    var world = createword(iterations, "F", rules);
+    draw_lsystem(world, distance, angle)
 }
 
 
@@ -126,19 +124,19 @@ function rewrite(word, rules) {
         with a comma appended for the next time
     */
 
-    var wordList = word.split(",")
-    for (var i = 0; i <= wordList.length-1; i++) { 
-        var curChar = wordList[i]
+    var output = new Array()
+    for (var i = 0; i <= word.length-1; i++) { 
+        var curChar = word[i]
         if (rules[curChar]) {
-            wordList[i] = rules[curChar]
+            output[i] = rules[curChar]
         }
         else {
           if (curChar.length > 0){
-            wordList[i] = curChar+=","
+            output[i] = curChar
              }
     }
   }
-    return wordList.join("")
+    return output.join("")
 }
 
 function createword(iterations, word, rules) {
@@ -180,25 +178,25 @@ function clearCanvas () {
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-function main (iters){
+function main1(iters){
 
     if (iters >= 10 ){
       
-      setTimeout(function(){main1(1)},600)
+      setTimeout(function(){main(1)},600)
     }
     else{
     turtle.sierpinski(iters)
-    setTimeout(function(){main(iters+1)},600);
+    setTimeout(function(){main1(iters+1)},600);
     }
   }
 
-function main1 (iters){
+function main(iters){
 if (iters >= 14){
-      setTimeout(function(){main(0)},600)
+      setTimeout(function(){main1(0)},600)
     }
     else{
     turtle.dragoncurve(iters)
-    setTimeout(function(){main1(iters+1)},600);
+    setTimeout(function(){main(iters+1)},600);
     }
   }
 
