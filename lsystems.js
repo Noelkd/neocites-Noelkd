@@ -76,16 +76,13 @@ turtle.forward = function(length) {
      return this.angleInRadians * 180.0 / Math.PI; 
  }
 
-var rewrite = function(word) {
-
+var rewrite = function(word, rules) {
+    
     var wordList = word.split(",")
     for (var i = 0; i <= wordList.length-1; i++) { 
         var curChar = wordList[i]
-        if (curChar == "X") {
-            wordList[i] = ",X,+,Y,F,"
-        }
-        else if (curChar == "Y") {
-            wordList[i] = ",F,X,-,Y,"
+        if (rules[curChar]) {
+            wordList[i] = rules[curChar]
         }
         else {
             if (curChar.length > 0){
@@ -96,10 +93,10 @@ var rewrite = function(word) {
     return wordList.join("")
 }
 
-var createword = function(iterations, word) {
+var createword = function(iterations, word, rules) {
 
     for (var i = 1; i<= iterations; i++) {
-        word = rewrite(word)
+        word = rewrite(word, rules)
     }
     return word
 }
@@ -120,7 +117,8 @@ turtle.lset = function (iterations) {
     turtle.penDown = true;
     var distance = 15;
     var angle = 90;
-    var world = createword(iterations, "F,X");
+    var rules = { "X":",X,+,Y,F,", "Y":",F,X,-,Y,"}
+    var world = createword(iterations, "F,X", rules);
     var finalworld = world.split(",");
 
     for(var i = 0; i<= finalworld.length; i++) {
