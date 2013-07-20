@@ -77,7 +77,7 @@ turtle.forward = function(length) {
  }
 
 turtle.dragoncurve = function (iterations) {
-    """ Draws a dragoncurve """
+    // Draws a dragoncurve 
     clearCanvas();
     this.angleInRadians = 0
     this.x = 500;
@@ -94,7 +94,7 @@ turtle.dragoncurve = function (iterations) {
 
 
 turtle.sierpinski = function(iterations){
-  """ Draws a sierpinski triangle """
+  // Draws a sierpinski triangle """
     clearCanvas();
     if (iterations % 2 == 0){
       this.angleInRadians = 0
@@ -117,14 +117,14 @@ turtle.sierpinski = function(iterations){
 
 
 function rewrite(word, rules) {
-    """ Rerite takes in a word, and a dict of rules
+    /* Rerite takes in a word, and a dict of rules
         The word must have a comma between each letter:
         eg 'F,-,G','A,+,B'
         The dict  of rules replaces any letter in the dict
         with the dict value for that key.
         Otherwise the character is returned to the array
         with a comma appended for the next time
-    """
+    */
 
     var wordList = word.split(",")
     for (var i = 0; i <= wordList.length-1; i++) { 
@@ -142,9 +142,9 @@ function rewrite(word, rules) {
 }
 
 function createword(iterations, word, rules) {
-  """ Create word runs rewrite for as many iterations
+  /*  Create word runs rewrite for as many iterations
       as you want then returns the result
-  """
+  */ 
 
     for (var i = 1; i<= iterations; i++) {
         word = rewrite(word, rules)
@@ -153,9 +153,9 @@ function createword(iterations, word, rules) {
 }
 
 function draw_lsystem(word, distance, angle){
-  """ Draw lsystem takes a word  splits it and based
+  /* Draw lsystem takes a word  splits it and based
       on the character does something 
-  """
+  */
   for(var i = 0; i<= word.length; i++) {
 
         var curChar = word[i]
@@ -175,7 +175,7 @@ function draw_lsystem(word, distance, angle){
 }
 
 function clearCanvas () {
-    """ Clears the canvas """
+    // Clears the canvas 
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
