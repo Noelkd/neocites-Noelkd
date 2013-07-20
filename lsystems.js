@@ -76,8 +76,56 @@ turtle.forward = function(length) {
      return this.angleInRadians * 180.0 / Math.PI; 
  }
 
-function rewrite(word, rules) {
+turtle.dragoncurve = function (iterations) {
+    """ Draws a dragoncurve """
+    clearCanvas();
+    this.angleInRadians = 0
+    this.x = 500;
+    this.y = 400;
+    this.penDown = true;
+    var distance = 15;
+    var angle = 90;
+    var rules = { "X":",X,+,Y,F,", "Y":",F,X,-,Y,"}
+    var world = createword(iterations, "F,X", rules);
+    var finalworld = world.split(",");
+    draw_lsystem(finalworld, distance, angle)
     
+}
+
+
+turtle.sierpinski = function(iterations){
+  """ Draws a sierpinski triangle """
+    clearCanvas();
+    if (iterations % 2 == 0){
+      this.angleInRadians = 0
+      this.left(90)
+    }
+    else{
+      this.angleInRadians = 0
+      this.left(150)
+    }
+    this.x = 50;
+    this.y = 800;
+    this.penDown = true;
+    var distance = 100/(iterations*3) 
+    var angle = 60;
+    var rules = { "F":",G,-,F,-,G,", "G":",F,+,G,+,F,"};
+    var world = createword(iterations, "F,", rules);
+    var finalworld = world.split(",");
+    draw_lsystem(finalworld, distance, angle)
+}
+
+
+function rewrite(word, rules) {
+    """ Rerite takes in a word, and a dict of rules
+        The word must have a comma between each letter:
+        eg 'F,-,G','A,+,B'
+        The dict  of rules replaces any letter in the dict
+        with the dict value for that key.
+        Otherwise the character is returned to the array
+        with a comma appended for the next time
+    """
+
     var wordList = word.split(",")
     for (var i = 0; i <= wordList.length-1; i++) { 
         var curChar = wordList[i]
@@ -85,7 +133,7 @@ function rewrite(word, rules) {
             wordList[i] = rules[curChar]
         }
         else {
-            if (curChar.length > 0){
+          if (curChar.length > 0){
             wordList[i] = curChar+=","
              }
     }
@@ -94,6 +142,9 @@ function rewrite(word, rules) {
 }
 
 function createword(iterations, word, rules) {
+  """ Create word runs rewrite for as many iterations
+      as you want then returns the result
+  """
 
     for (var i = 1; i<= iterations; i++) {
         word = rewrite(word, rules)
@@ -101,30 +152,17 @@ function createword(iterations, word, rules) {
     return word
 }
 
+function draw_lsystem(word, distance, angle){
+  """ Draw lsystem takes a word  splits it and based
+      on the character does something 
+  """
+  for(var i = 0; i<= word.length; i++) {
 
-turtle.lset = function (iterations) {
-    clearCanvas();
-    
-    //var iterations = document.getElementById('iters').value;
-    if (iterations < 1){
-      iterations = 0
-    }
-    else{
-      turtle.right(90)
-    }
-    turtle.x = 500;
-    turtle.y = 400;
-    turtle.penDown = true;
-    var distance = 15;
-    var angle = 90;
-    var rules = { "X":",X,+,Y,F,", "Y":",F,X,-,Y,"}
-    var world = createword(iterations, "F,X", rules);
-    var finalworld = world.split(",");
-
-    for(var i = 0; i<= finalworld.length; i++) {
-
-        var curChar = finalworld[i]
+        var curChar = word[i]
         if (curChar == "F"){
+            turtle.forward(distance)
+        }
+        if (curChar == "G"){
             turtle.forward(distance)
         }
         if (curChar == "+"){
@@ -136,21 +174,35 @@ turtle.lset = function (iterations) {
     }
 }
 
-function main (iters){
-
-    if (iters >= 15){
-      turtle.lset(0)
-      setTimeout(function(){main(1)},600)
-    }
-    else{
-    turtle.lset(iters)
-    setTimeout(function(){main(iters+1)},600);
-    }
-  }    
-
-var clearCanvas = function() {
+function clearCanvas () {
+    """ Clears the canvas """
     var context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+function main (iters){
+
+    if (iters >= 10 ){
+      
+      setTimeout(function(){main1(1)},600)
+    }
+    else{
+    turtle.sierpinski(iters)
+    setTimeout(function(){main(iters+1)},600);
+    }
+  }
+
+function main1 (iters){
+if (iters >= 14){
+      setTimeout(function(){main(0)},600)
+    }
+    else{
+    turtle.dragoncurve(iters)
+    setTimeout(function(){main1(iters+1)},600);
+    }
+  }
+
+
+
 
 main(0);
