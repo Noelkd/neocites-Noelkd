@@ -94,7 +94,7 @@ turtle.dragoncurve = function (iterations) {
 
 
 turtle.sierpinski = function(iterations){
-  // Draws a sierpinski triangle """
+  // Draws a sierpinski triangle
     clearCanvas();
     if (iterations % 2 == 0){
       this.angleInRadians = 0
@@ -114,6 +114,20 @@ turtle.sierpinski = function(iterations){
     var second_write_rules = {'F':'F++F++F++F', 'G':'F--F--F--F'};
     var final_world = rewrite(world, second_write_rules);
     draw_lsystem(final_world, distance, angle)
+}
+
+turtle.koch = function(iterations) {
+  // Draws a koch curve
+    clearCanvas();
+    this.angleInRadians = 0.5*Math.PI
+    this.x = 900;
+    this.y = 900;
+    this.penDown = true;
+    var distance = 700 / Math.pow(3, iterations);
+    var angle = 60;
+    var rule = { "F":"F+F--F+F"};
+    var world = createword(iterations, "F", rule);
+    draw_lsystem(world, distance, angle)
 }
 
 
@@ -181,12 +195,12 @@ function main(iters){
     if (iters >= 8){
       setTimeout(function(){main(0)},600)
     } else{
-      turtle.sierpinski(iters)
+      turtle.koch(iters)
       setTimeout(function(){main(iters+1)},600);
     }
   }
 
-function main1(iters){
+function main_1(iters){
 if (iters >= 14){
       setTimeout(function(){main(0)},600)
     } else{
@@ -194,4 +208,4 @@ if (iters >= 14){
       setTimeout(function(){main(iters+1)},600);
     }
   }
-  
+  main(0)
